@@ -18,7 +18,14 @@ const Login = () => {
       const data = await login(email, motDePasse);
       navigate(data.role === 'admin' ? '/admin' : '/');
     } catch (err) {
-      setErreur(err.response?.data?.message || 'Erreur de connexion');
+      const message = err.response?.data?.message;
+      if (message) {
+        setErreur(message);
+      } else if (err.request) {
+        setErreur('Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.');
+      } else {
+        setErreur('La connexion a échoué. Vérifiez vos informations et réessayez.');
+      }
     } finally {
       setLoading(false);
     }

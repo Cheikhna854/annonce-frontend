@@ -13,7 +13,7 @@ const Splash = () => {
   useEffect(() => {
     Promise.allSettled([api.get('/categories'), api.get('/annonces')]).then(([cats, ads]) => {
       if (cats.status === 'fulfilled' && Array.isArray(cats.value.data)) {
-        setCategories(cats.value.data.slice(0, 6));
+        setCategories(cats.value.data);
       }
       if (ads.status === 'fulfilled' && Array.isArray(ads.value.data)) {
         setAnnonces(ads.value.data);

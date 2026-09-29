@@ -2,7 +2,7 @@ import { categoryIcon } from '../../api/categoryIcon';
 import { imageUrl } from '../../api/imageUrl';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, MapPin, Phone, Search } from 'lucide-react';
+import { ArrowRight, Bell, MapPin, Phone, RotateCw, Search } from 'lucide-react';
 import api from '../../api/axios';
 import heroImage from '../../images/Accueil.jpeg';
 
@@ -14,14 +14,27 @@ const Home = () => {
   const [erreurAnnonces, setErreurAnnonces] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    api.get('/categories')
-      .then((res) => setCategories(Array.isArray(res.data) ? res.data : []))
-      .catch(() => setCategories([]));
+  const reessayerChargementAnnonces = () => {
+    setChargementAnnonces(true);
+    setErreurAnnonces('');
     api.get('/annonces')
       .then((res) => setAnnonces(Array.isArray(res.data) ? res.data : []))
       .catch(() => setErreurAnnonces('Impossible de charger les annonces. Réessayez dans un instant.'))
       .finally(() => setChargementAnnonces(false));
+  };
+
+  useEffect(() => {
+    let actif = true;
+    api.get('/categories')
+      .then((res) => { if (actif) setCategories(Array.isArray(res.data) ? res.data : []); })
+      .catch(() => { if (actif) setCategories([]); });
+    api.get('/annonces')
+      .then((res) => { if (actif) setAnnonces(Array.isArray(res.data) ? res.data : []); })
+      .catch(() => {
+        if (actif) setErreurAnnonces('Impossible de charger les annonces. Réessayez dans un instant.');
+      })
+      .finally(() => { if (actif) setChargementAnnonces(false); });
+    return () => { actif = false; };
   }, []);
 
   return (
@@ -58,7 +71,7 @@ const Home = () => {
         <Link to="/categories">Voir tout</Link>
       </div>
       <div className="categories-grid">
-        {categories.slice(0, 6).map((cat) => {
+        {categories.map((cat) => {
           const CategoryIcon = categoryIcon(cat.nom);
           return (
             <Link to={`/recherche?categorie=${cat._id}`} key={cat._id} className="category-item">
@@ -88,7 +101,14 @@ const Home = () => {
           </Link>
         ))}
         {chargementAnnonces && <p className="empty-state">Chargement des annonces...</p>}
-        {!chargementAnnonces && erreurAnnonces && <p className="empty-state" role="alert">{erreurAnnonces}</p>}
+        {!chargementAnnonces && erreurAnnonces && (
+          <div className="home-annonces-error">
+            <p role="alert">{erreurAnnonces}</p>
+            <button type="button" onClick={reessayerChargementAnnonces}>
+              <RotateCw size={15} aria-hidden="true" /> Réessayer
+            </button>
+          </div>
+        )}
         {!chargementAnnonces && !erreurAnnonces && annonces.length === 0 && (
           <p className="empty-state">Aucune annonce publiée pour le moment.</p>
         )}

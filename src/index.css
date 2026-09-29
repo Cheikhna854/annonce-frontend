@@ -266,6 +266,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .annonce-prix { color: var(--primary); font-size: 14px; font-weight: 700; }
 .annonce-ville { display: inline-flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 12px; }
 .annonce-telephone { display: inline-flex; align-items: center; gap: 5px; color: var(--teal); font-size: 12px; font-weight: 600; }
+.home-annonces-error { display: flex; grid-column: 1 / -1; flex-direction: column; align-items: center; gap: 12px; padding: 28px 12px; color: var(--text-muted); text-align: center; }
+.home-annonces-error button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border: 1px solid #d7dde4; border-radius: 6px; background: white; color: var(--primary); font-size: 13px; font-weight: 600; }
 
 .search-header { display: flex; gap: 8px; margin-bottom: 16px; }
 .filters-panel { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; padding: 16px; border-radius: 8px; background: white; }
