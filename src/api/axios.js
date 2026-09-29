@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-export const API_BASE = 'http://localhost:5000';
+// Utilise la variable d'environnement Vercel si elle existe, sinon localhost en local
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || `${API_BASE}/api`,
+  baseURL: API_URL,
 });
 
 api.interceptors.request.use((config) => {
