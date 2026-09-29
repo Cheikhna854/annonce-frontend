@@ -6,22 +6,47 @@ import { imageUrl } from '../../api/imageUrl';
 const MyAnnonces = () => {
   const [annonces, setAnnonces] = useState([]);
   const [filtre, setFiltre] = useState('toutes');
+  const [chargement, setChargement] = useState(true);
+  const [erreur, setErreur] = useState('');
+  const [actionEnCours, setActionEnCours] = useState('');
 
-  const charger = () => {
-    api.get('/annonces/mes-annonces').then((res) => setAnnonces(res.data));
+  const charger = async () => {
+    setErreur('');
+    try {
+      const { data } = await api.get('/annonces/mes-annonces');
+      setAnnonces(Array.isArray(data) ? data : []);
+    } catch {
+      setErreur('Impossible de charger vos annonces. Réessayez.');
+    } finally {
+      setChargement(false);
+    }
   };
 
   useEffect(() => { charger(); }, []);
 
   const toggleStatut = async (id) => {
-    await api.patch(`/annonces/${id}/statut`);
-    charger();
+    setActionEnCours(id);
+    try {
+      await api.patch(`/annonces/${id}/statut`);
+      await charger();
+    } catch {
+      setErreur('Impossible de modifier le statut de cette annonce.');
+    } finally {
+      setActionEnCours('');
+    }
   };
 
   const supprimer = async (id) => {
     if (!window.confirm('Supprimer cette annonce ?')) return;
-    await api.delete(`/annonces/${id}`);
-    charger();
+    setActionEnCours(id);
+    try {
+      await api.delete(`/annonces/${id}`);
+      await charger();
+    } catch {
+      setErreur('Impossible de supprimer cette annonce. Réessayez.');
+    } finally {
+      setActionEnCours('');
+    }
   };
 
   const statutBadge = (a) => {
@@ -43,6 +68,7 @@ const MyAnnonces = () => {
   return (
     <div className="page">
       <h2>Mes annonces</h2>
+      {erreur && <div className="alert-error" role="alert">{erreur}</div>}
       <div className="tabs">
         <button className={filtre === 'toutes' ? 'active' : ''} onClick={() => setFiltre('toutes')}>Toutes</button>
         <button className={filtre === 'actives' ? 'active' : ''} onClick={() => setFiltre('actives')}>En ligne</button>
@@ -55,19 +81,24 @@ const MyAnnonces = () => {
             <img src={imageUrl(a.images?.[0])} alt={a.titre} />
             <div className="mes-annonce-info">
               <p className="annonce-titre">{a.titre}</p>
-              <p className="annonce-prix">{a.prix.toLocaleString()} FCFA</p>
+              <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>
               {statutBadge(a)}
             </div>
             <div className="mes-annonce-actions">
               <Link to={`/annonce/${a._id}`}>Voir</Link>
               {a.statut === 'validee' && (
-                <button onClick={() => toggleStatut(a._id)}>{a.actif ? 'Désactiver' : 'Activer'}</button>
+                <button onClick={() => toggleStatut(a._id)} disabled={actionEnCours === a._id}>
+                  {actionEnCours === a._id ? 'Mise à jour...' : a.actif ? 'Désactiver' : 'Activer'}
+                </button>
               )}
-              <button onClick={() => supprimer(a._id)} className="text-danger">Supprimer</button>
+              <button onClick={() => supprimer(a._id)} className="text-danger" disabled={actionEnCours === a._id}>
+                {actionEnCours === a._id ? 'Suppression...' : 'Supprimer'}
+              </button>
             </div>
           </div>
         ))}
-        {annoncesFiltrees.length === 0 && <p className="empty-state">Aucune annonce</p>}
+        {chargement && <p className="empty-state">Chargement de vos annonces...</p>}
+        {!chargement && !erreur && annoncesFiltrees.length === 0 && <p className="empty-state">Aucune annonce</p>}
       </div>
 
       <Link to="/publier" className="btn-primary fab-button">Publier une nouvelle annonce</Link>

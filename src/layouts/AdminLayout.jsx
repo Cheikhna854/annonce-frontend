@@ -1,15 +1,22 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { ChartColumn, ClipboardList, FolderOpen, LogOut, UsersRound } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const menu = [
-  { to: '/admin', label: 'Dashboard', icon: '📊' },
-  { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: '👥' },
-  { to: '/admin/annonces', label: 'Annonces', icon: '📋' },
-  { to: '/admin/categories', label: 'Catégories', icon: '📂' },
+  { to: '/admin', label: 'Dashboard', icon: ChartColumn },
+  { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UsersRound },
+  { to: '/admin/annonces', label: 'Annonces', icon: ClipboardList },
+  { to: '/admin/categories', label: 'Catégories', icon: FolderOpen },
 ];
 
 const AdminLayout = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const deconnecter = () => {
+    logout();
+    navigate('/connexion', { replace: true });
+  };
 
   return (
     <div className="admin-shell">
@@ -23,13 +30,13 @@ const AdminLayout = () => {
               end={item.to === '/admin'}
               className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
             >
-              <span>{item.icon}</span> {item.label}
+              <item.icon size={18} aria-hidden="true" /> {item.label}
             </NavLink>
           ))}
         </nav>
         <div className="admin-sidebar-footer">
           <span>{user?.prenom} {user?.nom}</span>
-          <button onClick={logout} className="btn-logout">Déconnexion</button>
+          <button onClick={deconnecter} className="btn-logout"><LogOut size={16} aria-hidden="true" /> Déconnexion</button>
         </div>
       </aside>
       <main className="admin-content">

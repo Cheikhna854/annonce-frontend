@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Phone, Search as SearchIcon } from 'lucide-react';
 import api from '../../api/axios';
 import { imageUrl } from '../../api/imageUrl';
-import { categoryIcon } from '../../api/categoryIcon';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
   const [annonces, setAnnonces] = useState([]);
+  const [chargement, setChargement] = useState(true);
+  const [erreur, setErreur] = useState('');
   const [filtres, setFiltres] = useState({
     q: searchParams.get('q') || '',
     categorie: searchParams.get('categorie') || '',
@@ -21,27 +23,53 @@ const Search = () => {
     api.get('/categories').then((res) => setCategories(res.data));
   }, []);
 
-  const rechercher = async () => {
-    const params = Object.fromEntries(Object.entries(filtres).filter(([, v]) => v));
-    const { data } = await api.get('/annonces', { params });
-    setAnnonces(data);
-  };
-
   useEffect(() => {
-    rechercher();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setFiltres((precedents) => ({
+      ...precedents,
+      q: searchParams.get('q') || '',
+      categorie: searchParams.get('categorie') || '',
+    }));
+    let actif = true;
+    const params = Object.fromEntries(
+      ['q', 'categorie']
+        .map((cle) => [cle, searchParams.get(cle) || ''])
+        .filter(([, valeur]) => valeur),
+    );
+    setChargement(true);
+    setErreur('');
+    api.get('/annonces', { params })
+      .then((res) => { if (actif) setAnnonces(Array.isArray(res.data) ? res.data : []); })
+      .catch(() => { if (actif) setErreur('Impossible de charger les annonces. Réessayez.'); })
+      .finally(() => { if (actif) setChargement(false); });
+    return () => { actif = false; };
+  }, [searchParams]);
+
+  const rechercher = async (event) => {
+    event?.preventDefault();
+    const params = Object.fromEntries(Object.entries(filtres).filter(([, v]) => v));
+    setErreur('');
+    setChargement(true);
+    try {
+      const { data } = await api.get('/annonces', { params });
+      setAnnonces(Array.isArray(data) ? data : []);
+    } catch {
+      setErreur('Impossible de charger les annonces. Vérifiez votre connexion et réessayez.');
+    } finally {
+      setChargement(false);
+    }
+  };
 
   return (
     <div className="page">
-      <div className="search-header">
+      <h1>Explorer les annonces</h1>
+      <form className="search-header" onSubmit={rechercher}>
         <input
           placeholder="Rechercher une annonce..."
           value={filtres.q}
           onChange={(e) => setFiltres({ ...filtres, q: e.target.value })}
         />
-        <button onClick={rechercher}>🔍</button>
-      </div>
+        <button type="submit" aria-label="Rechercher"><SearchIcon size={18} aria-hidden="true" /></button>
+      </form>
 
       <div className="filters-panel">
         <label>Catégorie</label>
@@ -52,7 +80,7 @@ const Search = () => {
           <option value="">Toutes</option>
           {categories.map((c) => (
             <option key={c._id} value={c._id}>
-              {categoryIcon(c.nom)} {c.nom}
+              {c.nom}
             </option>
           ))}
         </select>
@@ -88,7 +116,7 @@ const Search = () => {
           <option value="prix_desc">Prix décroissant</option>
         </select>
 
-        <button className="btn-primary" onClick={rechercher}>Voir les résultats</button>
+        <button className="btn-primary" type="button" onClick={rechercher} disabled={chargement}>Voir les résultats</button>
       </div>
 
       <div className="annonces-list">
@@ -97,12 +125,17 @@ const Search = () => {
             <img src={imageUrl(a.images?.[0])} alt={a.titre} />
             <div>
               <p className="annonce-titre">{a.titre}</p>
-              <p className="annonce-prix">{a.prix.toLocaleString()} FCFA</p>
+              <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>
               <p className="annonce-ville">{a.ville}</p>
+              {a.utilisateur?.telephone && (
+                <p className="annonce-telephone"><Phone size={13} aria-hidden="true" /> {a.utilisateur.telephone}</p>
+              )}
             </div>
           </Link>
         ))}
-        {annonces.length === 0 && <p className="empty-state">Aucune annonce trouvée</p>}
+        {chargement && <p className="empty-state">Chargement des annonces...</p>}
+        {!chargement && erreur && <p className="empty-state" role="alert">{erreur}</p>}
+        {!chargement && !erreur && annonces.length === 0 && <p className="empty-state">Aucune annonce trouvée</p>}
       </div>
     </div>
   );

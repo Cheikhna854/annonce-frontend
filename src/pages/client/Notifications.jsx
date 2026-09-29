@@ -1,25 +1,15 @@
-const notificationsMock = [
-  { id: 1, icone: '💬', texte: 'Vous avez reçu un message concernant votre annonce', temps: '2j' },
-  { id: 2, icone: '✅', texte: 'Votre annonce est en ligne', temps: '3j' },
-  { id: 3, icone: '❤️', texte: 'Quelqu\'un a ajouté votre annonce à ses favoris', temps: '4j' },
-  { id: 4, icone: '📦', texte: 'Nouvelle annonce disponible dans une catégorie suivie', temps: '5j' },
-  { id: 5, icone: '✔️', texte: 'Votre compte a été vérifié avec succès', temps: '1sem' },
-];
+import { Bell, MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Notifications = () => {
   return (
     <div className="page">
-      <h2>Notifications</h2>
-      <div className="notifications-list">
-        {notificationsMock.map((n) => (
-          <div key={n.id} className="notification-item">
-            <span className="notification-icon">{n.icone}</span>
-            <div>
-              <p>{n.texte}</p>
-              <span className="notification-temps">{n.temps}</span>
-            </div>
-          </div>
-        ))}
+      <h1>Notifications</h1>
+      <div className="notifications-empty">
+        <Bell size={28} strokeWidth={1.6} aria-hidden="true" />
+        <h2>Aucune notification pour le moment</h2>
+        <p>Les nouvelles concernant vos annonces et vos échanges apparaîtront ici.</p>
+        <Link to="/messages"><MessageCircle size={17} aria-hidden="true" /> Consulter mes messages</Link>
       </div>
     </div>
   );

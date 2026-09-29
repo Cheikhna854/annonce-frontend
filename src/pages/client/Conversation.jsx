@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Send } from 'lucide-react';
 import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
 
@@ -9,19 +10,31 @@ const Conversation = () => {
   const annonceId = searchParams.get('annonce');
   const [messages, setMessages] = useState([]);
   const [texte, setTexte] = useState('');
+  const [erreur, setErreur] = useState('');
+  const [envoi, setEnvoi] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const bottomRef = useRef(null);
 
-  const charger = () => {
-    api.get(`/messages/${contactId}`).then((res) => setMessages(res.data));
-  };
-
   useEffect(() => {
+    let actif = true;
+    const charger = async () => {
+      try {
+        const { data } = await api.get(`/messages/${contactId}`);
+        if (actif) {
+          setMessages(Array.isArray(data) ? data : []);
+          setErreur('');
+        }
+      } catch {
+        if (actif) setErreur('Impossible de charger la conversation. Vérifiez votre connexion.');
+      }
+    };
     charger();
     const interval = setInterval(charger, 5000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      actif = false;
+      clearInterval(interval);
+    };
   }, [contactId]);
 
   useEffect(() => {
@@ -30,20 +43,33 @@ const Conversation = () => {
 
   const envoyer = async (e) => {
     e.preventDefault();
-    if (!texte.trim()) return;
-    await api.post('/messages', { recepteur: contactId, contenu: texte, annonce: annonceId });
-    setTexte('');
-    charger();
+    if (!texte.trim() || envoi) return;
+    setErreur('');
+    setEnvoi(true);
+    try {
+      const { data } = await api.post('/messages', {
+        recepteur: contactId,
+        contenu: texte.trim(),
+        annonce: annonceId,
+      });
+      setMessages((precedents) => [...precedents, data]);
+      setTexte('');
+    } catch (error) {
+      setErreur(error.response?.data?.message || 'Votre message n’a pas pu être envoyé. Réessayez.');
+    } finally {
+      setEnvoi(false);
+    }
   };
 
   return (
     <div className="page conversation-page">
       <div className="conversation-header">
-        <button onClick={() => navigate(-1)}>←</button>
+        <button onClick={() => navigate(-1)} aria-label="Retour"><ArrowLeft size={20} aria-hidden="true" /></button>
         <span>Conversation</span>
       </div>
 
       <div className="conversation-body">
+        {erreur && <p className="conversation-error" role="alert">{erreur}</p>}
         {messages.map((m) => (
           <div
             key={m._id}
@@ -60,8 +86,11 @@ const Conversation = () => {
           placeholder="Écrire un message..."
           value={texte}
           onChange={(e) => setTexte(e.target.value)}
+          aria-label="Votre message"
         />
-        <button type="submit">➤</button>
+        <button type="submit" aria-label="Envoyer le message" disabled={envoi || !texte.trim()}>
+          <Send size={18} aria-hidden="true" />
+        </button>
       </form>
     </div>
   );

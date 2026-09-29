@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ShoppingBag, Store } from 'lucide-react';
 
 const ChooseRole = () => {
   return (
@@ -8,13 +9,13 @@ const ChooseRole = () => {
 
       <div className="role-cards">
         <Link to="/inscription" className="role-card">
-          <div className="role-icon">🛍️</div>
+          <div className="role-icon"><ShoppingBag size={30} strokeWidth={1.7} aria-hidden="true" /></div>
           <h3>Je suis client</h3>
           <p>Je veux parcourir et acheter des annonces</p>
         </Link>
 
         <Link to="/inscription-prestataire" className="role-card">
-          <div className="role-icon">🏪</div>
+          <div className="role-icon"><Store size={30} strokeWidth={1.7} aria-hidden="true" /></div>
           <h3>Je suis vendeur</h3>
           <p>Je veux publier et gérer mes annonces</p>
         </Link>

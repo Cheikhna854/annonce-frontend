@@ -3,20 +3,59 @@ import api from '../../api/axios';
 
 const AnnoncesAdmin = () => {
   const [annonces, setAnnonces] = useState([]);
+  const [chargement, setChargement] = useState(true);
+  const [erreur, setErreur] = useState('');
+  const [actionEnCours, setActionEnCours] = useState('');
 
-  const charger = () => api.get('/admin/annonces').then((res) => setAnnonces(res.data));
+  const charger = async () => {
+    setErreur('');
+    try {
+      const { data } = await api.get('/admin/annonces');
+      setAnnonces(Array.isArray(data) ? data : []);
+    } catch {
+      setErreur('Impossible de charger les annonces. Réessayez.');
+    } finally {
+      setChargement(false);
+    }
+  };
 
   useEffect(() => { charger(); }, []);
 
   const valider = async (id) => {
-    await api.patch(`/admin/annonces/${id}/valider`);
-    charger();
+    setActionEnCours(id);
+    try {
+      await api.patch(`/admin/annonces/${id}/valider`);
+      await charger();
+    } catch {
+      setErreur('Impossible de valider cette annonce.');
+    } finally {
+      setActionEnCours('');
+    }
   };
 
   const supprimer = async (id) => {
     if (!window.confirm('Supprimer cette annonce ?')) return;
-    await api.delete(`/admin/annonces/${id}`);
-    charger();
+    setActionEnCours(id);
+    try {
+      await api.delete(`/admin/annonces/${id}`);
+      await charger();
+    } catch {
+      setErreur('Impossible de supprimer cette annonce.');
+    } finally {
+      setActionEnCours('');
+    }
+  };
+
+  const traiterSignalement = async (id) => {
+    setActionEnCours(id);
+    try {
+      await api.patch(`/admin/annonces/${id}/signalements/traiter`);
+      await charger();
+    } catch {
+      setErreur('Impossible de clôturer le signalement.');
+    } finally {
+      setActionEnCours('');
+    }
   };
 
   const statutBadge = (statut) => {
@@ -27,7 +66,11 @@ const AnnoncesAdmin = () => {
 
   return (
     <div className="page">
-      <h2>Annonces</h2>
+      <h1>Annonces</h1>
+      {erreur && <div className="alert-error" role="alert">{erreur}</div>}
+      {chargement && <p className="empty-state">Chargement des annonces...</p>}
+      {!chargement && !erreur && annonces.length === 0 && <p className="empty-state">Aucune annonce à modérer.</p>}
+      {!chargement && !erreur && annonces.length > 0 && (
       <table className="admin-table">
         <thead>
           <tr>
@@ -44,21 +87,27 @@ const AnnoncesAdmin = () => {
           {annonces.map((a) => (
             <tr key={a._id}>
               <td>{a.titre}</td>
-              <td>{a.prix.toLocaleString()} FCFA</td>
+              <td>{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</td>
               <td>{a.categorie?.nom}</td>
               <td>{a.utilisateur?.prenom} {a.utilisateur?.nom}</td>
               <td>{statutBadge(a.statut)}</td>
               <td>{a.signalements > 0 ? <span className="text-danger">{a.signalements}</span> : '—'}</td>
               <td>
                 {a.statut === 'en_attente' && (
-                  <button onClick={() => valider(a._id)} style={{ color: 'var(--success)' }}>Valider</button>
+                  <button onClick={() => valider(a._id)} disabled={actionEnCours === a._id} style={{ color: 'var(--success)' }}>Valider</button>
                 )}
-                <button onClick={() => supprimer(a._id)} className="text-danger">Supprimer</button>
+                {a.signalements > 0 && (
+                  <button onClick={() => traiterSignalement(a._id)} disabled={actionEnCours === a._id}>
+                    Traiter ({a.signalements})
+                  </button>
+                )}
+                <button onClick={() => supprimer(a._id)} disabled={actionEnCours === a._id} className="text-danger">Supprimer</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      )}
     </div>
   );
 };
