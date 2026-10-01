@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Phone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroImage from '../../images/Accueil.jpeg';
 import api from '../../api/axios';
 import AnnonceImage from '../../components/AnnonceImage';
+import formatAnnonceDate from '../../utils/formatAnnonceDate';
 
 const Splash = () => {
   const [categories, setCategories] = useState([]);
@@ -76,9 +77,7 @@ const Splash = () => {
                 <p className="annonce-titre">{annonce.titre}</p>
                 <p className="annonce-prix">{Number(annonce.prix || 0).toLocaleString('fr-FR')} FCFA</p>
                 <p className="annonce-ville">{annonce.ville}</p>
-                {annonce.utilisateur?.telephone && (
-                  <p className="annonce-telephone"><Phone size={13} aria-hidden="true" /> {annonce.utilisateur.telephone}</p>
-                )}
+                <p className="annonce-date">Publiée {formatAnnonceDate(annonce.createdAt)}</p>
               </div>
             </Link>
           ))}

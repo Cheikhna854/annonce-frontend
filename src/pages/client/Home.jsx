@@ -2,9 +2,10 @@ import { categoryIcon } from '../../api/categoryIcon';
 import AnnonceImage from '../../components/AnnonceImage';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, MapPin, Phone, RotateCw, Search } from 'lucide-react';
+import { ArrowRight, Bell, MapPin, RotateCw, Search } from 'lucide-react';
 import api from '../../api/axios';
 import heroImage from '../../images/Accueil.jpeg';
+import formatAnnonceDate from '../../utils/formatAnnonceDate';
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -94,9 +95,7 @@ const Home = () => {
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>
               <p className="annonce-ville">{a.ville}</p>
-              {a.utilisateur?.telephone && (
-                <p className="annonce-telephone"><Phone size={13} aria-hidden="true" /> {a.utilisateur.telephone}</p>
-              )}
+              <p className="annonce-date">Publiée {formatAnnonceDate(a.createdAt)}</p>
             </div>
           </Link>
         ))}

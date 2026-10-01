@@ -1393,6 +1393,7 @@ min-width: 600px;
 .annonce-titre { display: -webkit-box; width: 100%; overflow: hidden; color: #263a30; font-size: 14px; font-weight: 680; line-height: 1.35; text-overflow: ellipsis; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .annonce-prix { color: #1d6a4c; font-size: 15px; font-weight: 760; }
 .annonce-ville, .annonce-telephone { max-width: 100%; color: #69766e; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.annonce-date { color: #69766e; font-size: 12px; line-height: 1.4; }
 .landing-annonces-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
 .landing-annonces-grid .annonce-card img { height: auto; aspect-ratio: 4 / 3; }
 .annonces-list { gap: 14px; }
@@ -1483,7 +1484,7 @@ min-width: 600px;
   .annonce-info { gap: 5px; min-height: 100px; padding: 11px 11px 13px; }
   .annonce-titre { font-size: 12px; }
   .annonce-prix { font-size: 13px; }
-  .annonce-ville, .annonce-telephone { font-size: 10px; }
+  .annonce-ville, .annonce-telephone, .annonce-date { font-size: 10px; }
 }
 
 @media (max-width: 360px) {

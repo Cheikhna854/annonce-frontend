@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Phone, Search as SearchIcon } from 'lucide-react';
+import { Search as SearchIcon } from 'lucide-react';
 import api from '../../api/axios';
 import AnnonceImage from '../../components/AnnonceImage';
+import formatAnnonceDate from '../../utils/formatAnnonceDate';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -127,9 +128,7 @@ const Search = () => {
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>
               <p className="annonce-ville">{a.ville}</p>
-              {a.utilisateur?.telephone && (
-                <p className="annonce-telephone"><Phone size={13} aria-hidden="true" /> {a.utilisateur.telephone}</p>
-              )}
+              <p className="annonce-date">Publiée {formatAnnonceDate(a.createdAt)}</p>
             </div>
           </Link>
         ))}
