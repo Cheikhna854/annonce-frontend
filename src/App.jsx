@@ -19,6 +19,7 @@ const AnnonceDetail = lazy(() => import('./pages/client/AnnonceDetail'));
 const SellerProfile = lazy(() => import('./pages/client/SellerProfile'));
 const PublishAnnonce = lazy(() => import('./pages/client/PublishAnnonce'));
 const MyAnnonces = lazy(() => import('./pages/client/MyAnnonces'));
+const EditAnnonce = lazy(() => import('./pages/client/EditAnnonce'));
 const Messages = lazy(() => import('./pages/client/Messages'));
 const Conversation = lazy(() => import('./pages/client/Conversation'));
 const Profile = lazy(() => import('./pages/client/Profile'));
@@ -58,6 +59,7 @@ function App() {
             <Route path="/favoris" element={<Favoris />} />
             <Route path="/publier" element={<PrivateRoute roles={['prestataire']}><PublishAnnonce /></PrivateRoute>} />
             <Route path="/mes-annonces" element={<PrivateRoute roles={['prestataire']}><MyAnnonces /></PrivateRoute>} />
+            <Route path="/mes-annonces/:id/modifier" element={<PrivateRoute roles={['prestataire']}><EditAnnonce /></PrivateRoute>} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/profil" element={<Profile />} />
             <Route path="/profil/modifier" element={<EditProfile />} />

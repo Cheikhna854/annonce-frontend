@@ -35,7 +35,7 @@ const Splash = () => {
 
         <div className="landing-copy">
           <p className="landing-eyebrow">LE MARCHÉ LOCAL, À PORTÉE DE MAIN</p>
-          <h1>Annonces.sn</h1>
+          <h1>Les bonnes affaires<br /><span>commencent ici.</span></h1>
           <p className="landing-description">Achetez et vendez près de chez vous, partout au Sénégal.</p>
           <div className="landing-actions">
             <Link to="/recherche" className="landing-primary">Explorer les annonces <span aria-hidden="true">↗</span></Link>

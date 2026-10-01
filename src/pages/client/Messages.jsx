@@ -8,21 +8,46 @@ const Messages = () => {
   const [conversations, setConversations] = useState([]);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState('');
+  const [tentative, setTentative] = useState(0);
 
   useEffect(() => {
     let actif = true;
-    api.get('/messages/conversations')
-      .then((res) => { if (actif) setConversations(Array.isArray(res.data) ? res.data : []); })
-      .catch(() => { if (actif) setErreur('Impossible de charger vos conversations. Réessayez.'); })
-      .finally(() => { if (actif) setChargement(false); });
-    return () => { actif = false; };
-  }, []);
+    const controller = new AbortController();
+    setChargement(true);
+    setErreur('');
+
+    api.get('/messages/conversations', { signal: controller.signal, timeout: 20000 })
+      .then(({ data }) => {
+        if (actif) setConversations(Array.isArray(data) ? data : []);
+      })
+      .catch((error) => {
+        if (!actif || error.code === 'ERR_CANCELED') return;
+        setErreur(error.code === 'ECONNABORTED'
+          ? 'Le serveur met trop de temps à répondre. Réessayez.'
+          : 'Impossible de charger vos conversations. Vérifiez votre connexion puis réessayez.');
+      })
+      .finally(() => {
+        if (actif) setChargement(false);
+      });
+
+    return () => {
+      actif = false;
+      controller.abort();
+    };
+  }, [tentative]);
+
+  const conversationsVisibles = conversations.filter((conv) => conv.contact?._id);
 
   return (
-    <div className="page">
-      <h2>Messages</h2>
+    <div className="page messages-page">
+      <header className="messages-heading">
+        <p className="messages-kicker">VOTRE ESPACE D’ÉCHANGE</p>
+        <h1>Messages</h1>
+        <p>Retrouvez ici vos conversations avec les membres.</p>
+      </header>
+
       <div className="conversations-list">
-        {conversations.filter((conv) => conv.contact?._id).map((conv) => (
+        {conversationsVisibles.map((conv) => (
           <Link
             to={`/conversation/${conv.contact._id}`}
             key={conv.contact._id}
@@ -36,9 +61,22 @@ const Messages = () => {
             {conv.nonLus > 0 && <span className="badge-count">{conv.nonLus}</span>}
           </Link>
         ))}
-        {chargement && <p className="empty-state">Chargement des conversations...</p>}
-        {!chargement && erreur && <p className="empty-state" role="alert">{erreur}</p>}
-        {!chargement && !erreur && conversations.length === 0 && (
+
+        {chargement && (
+          <div className="conversation-loading" role="status" aria-live="polite">
+            <span className="loading-spinner" aria-hidden="true" />
+            Chargement des conversations…
+          </div>
+        )}
+
+        {!chargement && erreur && (
+          <div className="messages-error">
+            <p role="alert">{erreur}</p>
+            <button type="button" onClick={() => setTentative((value) => value + 1)}>Réessayer</button>
+          </div>
+        )}
+
+        {!chargement && !erreur && conversationsVisibles.length === 0 && (
           <div className="empty-state">
             <MessageCircle size={30} aria-hidden="true" />
             <p>Aucune conversation pour le moment.</p>

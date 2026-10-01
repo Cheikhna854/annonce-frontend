@@ -86,6 +86,7 @@ const MyAnnonces = () => {
             </div>
             <div className="mes-annonce-actions">
               <Link to={`/annonce/${a._id}`}>Voir</Link>
+              <Link to={`/mes-annonces/${a._id}/modifier`}>Modifier</Link>
               {a.statut === 'validee' && (
                 <button onClick={() => toggleStatut(a._id)} disabled={actionEnCours === a._id}>
                   {actionEnCours === a._id ? 'Mise à jour...' : a.actif ? 'Désactiver' : 'Activer'}
