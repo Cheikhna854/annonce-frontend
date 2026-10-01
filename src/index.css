@@ -563,120 +563,648 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   }
 }
 
-/* --- LAYOUT GLOBAL ADMIN --- */
+/* =========================================================
+ESPACE ADMIN — VERSION CORRIGÉE
+========================================================= */
+
 .admin-shell {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
-  background-color: #f8f9fa;
+display: flex;
+width: 100%;
+min-height: 100vh;
+background: var(--bg);
 }
+
+/* =========================
+SIDEBAR ADMIN
+========================= */
 
 .admin-sidebar {
-  width: 250px;
-  background-color: #1c1c1c;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-  z-index: 100;
+position: sticky;
+top: 0;
+z-index: 100;
+display: flex;
+flex: 0 0 260px;
+flex-direction: column;
+width: 260px;
+height: 100vh;
+padding: 20px 16px;
+overflow-y: auto;
+background: var(--sidebar-bg);
+color: #ffffff;
 }
+
+/* Logo */
+
+.admin-logo,
+.admin-logo-text {
+display: block;
+margin: 0 4px 24px;
+color: var(--primary);
+font-size: 20px;
+font-weight: 700;
+}
+
+/* =========================
+LES 4 MENUS ADMIN
+========================= */
+
+.admin-sidebar nav {
+display: flex;
+flex-direction: column;
+gap: 8px;
+width: 100%;
+margin: 0;
+}
+
+/* Chaque menu */
+
+.admin-nav-item,
+.admin-nav-link,
+.admin-sidebar nav a {
+display: flex;
+align-items: center;
+width: 100%;
+min-height: 46px;
+gap: 12px;
+padding: 12px 14px;
+
+border: 0;
+border-radius: 8px;
+
+background: transparent;
+color: #d1d5db;
+
+font-size: 14px;
+font-weight: 500;
+line-height: 1.2;
+
+text-decoration: none;
+visibility: visible;
+opacity: 1;
+
+transition:
+background-color 0.2s ease,
+color 0.2s ease,
+transform 0.15s ease;
+}
+
+/* Icônes des menus */
+
+.admin-nav-item svg,
+.admin-nav-link svg,
+.admin-sidebar nav a svg {
+flex: 0 0 20px;
+width: 20px;
+height: 20px;
+}
+
+/* Survol */
+
+.admin-nav-item:hover,
+.admin-nav-link:hover,
+.admin-sidebar nav a:hover {
+background: rgba(255, 255, 255, 0.08);
+color: #ffffff;
+}
+
+/* Menu actif */
+
+.admin-nav-item.active,
+.admin-nav-link.active,
+.admin-sidebar nav a.active {
+background: var(--primary);
+color: var(--sidebar-bg);
+font-weight: 700;
+}
+
+/* =========================
+FOOTER SIDEBAR
+========================= */
+
+.admin-sidebar-footer {
+display: flex;
+flex-direction: column;
+gap: 10px;
+margin-top: auto;
+padding-top: 16px;
+border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admin-sidebar-footer a {
+color: #d1d5db;
+font-size: 13px;
+}
+
+.btn-logout {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+min-height: 42px;
+gap: 8px;
+padding: 10px;
+
+border: 1px solid rgba(242, 201, 76, 0.4);
+border-radius: 7px;
+
+background: rgba(255, 255, 255, 0.04);
+color: #ffffff;
+
+font-size: 13px;
+cursor: pointer;
+
+transition:
+background-color 0.2s ease,
+border-color 0.2s ease;
+}
+
+.btn-logout:hover {
+border-color: #dc2626;
+background: #dc2626;
+}
+
+/* =========================
+CONTENU ADMIN
+========================= */
 
 .admin-content {
-  flex: 1;
-  padding: 24px;
-  width: 100%;
-  overflow-x: hidden;
+flex: 1;
+width: calc(100% - 260px);
+min-width: 0;
+max-width: none;
+padding: 24px;
+overflow-x: hidden;
+background: var(--bg);
 }
 
-/* Header Mobile (caché sur PC) */
-.admin-mobile-header {
-  display: none;
+/* =========================
+HEADER ADMIN
+========================= */
+
+.admin-dashboard-heading {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
 }
 
-/* --- TABLEAUX RESPONSIVE --- */
+.admin-dashboard-heading h1 {
+color: var(--text);
+font-size: 26px;
+}
+
+.admin-dashboard-kicker {
+margin-bottom: 5px;
+color: #8b7835;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.05em;
+}
+
+.admin-session-label {
+color: var(--text-muted);
+font-size: 13px;
+}
+
+/* =========================
+4 CARTES STATISTIQUES
+========================= */
+
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 16px;
+margin-top: 20px;
+}
+
+.stat-card {
+min-width: 0;
+padding: 18px;
+
+border: 1px solid #e8e9e5;
+border-left: 4px solid var(--primary);
+border-radius: 8px;
+
+background: #ffffff;
+
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+transition:
+box-shadow 0.2s ease,
+transform 0.15s ease;
+}
+
+.stat-card:hover {
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+transform: translateY(-2px);
+}
+
+.stat-label {
+color: var(--text-muted);
+font-size: 13px;
+}
+
+.stat-value {
+margin-top: 6px;
+font-size: 28px;
+font-weight: 700;
+}
+
+.stat-card-annonces .stat-value {
+color: var(--success);
+}
+
+.stat-card-attente .stat-value {
+color: var(--warning);
+}
+
+.stat-card-signalements .stat-value {
+color: var(--danger);
+}
+
+.stat-green {
+color: var(--success);
+}
+
+.stat-red {
+color: var(--danger);
+}
+
+/* =========================
+GRAPHIQUE
+========================= */
+
+.admin-chart {
+margin-top: 18px;
+padding: 20px;
+
+border: 1px solid #e8e9e5;
+border-radius: 8px;
+
+background: #ffffff;
+}
+
+.admin-chart h2 {
+margin-bottom: 18px;
+color: var(--text);
+font-size: 15px;
+}
+
+.admin-chart-plot {
+display: grid;
+grid-template-columns: 32px minmax(0, 1fr);
+gap: 10px;
+height: 250px;
+}
+
+.admin-chart-scale {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding-bottom: 25px;
+color: var(--text-muted);
+font-size: 11px;
+text-align: right;
+}
+
+.admin-chart-columns {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 16px;
+}
+
+.admin-chart-column {
+display: grid;
+grid-template-rows: minmax(0, 1fr) 25px;
+gap: 6px;
+min-width: 0;
+
+color: var(--text-muted);
+font-size: 11px;
+text-align: center;
+}
+
+.admin-chart-track {
+display: flex;
+align-items: flex-end;
+justify-content: center;
+min-height: 0;
+
+border-bottom: 1px solid #d1d5db;
+
+background:
+repeating-linear-gradient(
+to top,
+transparent 0,
+transparent calc(25% - 1px),
+#f3f4f6 calc(25% - 1px),
+#f3f4f6 25%
+);
+}
+
+.admin-chart-bar {
+width: min(72%, 84px);
+border-radius: 5px 5px 0 0;
+}
+
+.admin-chart-bar-users {
+background: var(--primary);
+}
+
+.admin-chart-bar-annonces {
+background: var(--success);
+}
+
+.admin-chart-bar-attente {
+background: var(--warning);
+}
+
+.admin-chart-bar-signalements {
+background: var(--danger);
+}
+
+/* =========================
+TABLEAUX
+========================= */
+
 .table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-top: 16px;
+width: 100%;
+margin-top: 16px;
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+
+border-radius: 8px;
+background: #ffffff;
+
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap; /* Empêche les cellules de se déformer */
+width: 100%;
+min-width: 650px;
+border-collapse: collapse;
+background: #ffffff;
 }
 
 .admin-table th,
 .admin-table td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #edf2f7;
+padding: 12px 16px;
+border-bottom: 1px solid #edf2f7;
+text-align: left;
+font-size: 14px;
 }
 
-/* --- MEDIA QUERIES (MOBILE < 768px) --- */
+.admin-table th {
+color: var(--text-muted);
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+}
+
+.admin-table tr:hover {
+background: #f9fafb;
+}
+
+.admin-table button {
+border: 0;
+background: none;
+color: var(--primary-dark);
+font-size: 13px;
+cursor: pointer;
+}
+
+/* =========================
+CATÉGORIES ADMIN
+========================= */
+
+.category-form {
+display: flex;
+gap: 8px;
+margin: 16px 0;
+}
+
+.category-form input {
+min-width: 0;
+flex: 1;
+padding: 10px;
+
+border: 1px solid #e5e7eb;
+border-radius: 8px;
+}
+
+.categories-admin-list {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.category-admin-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 12px 16px;
+
+border: 1px solid #e8e9e5;
+border-radius: 8px;
+
+background: #ffffff;
+}
+
+.category-admin-name {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+}
+
+/* =========================
+HEADER MOBILE
+========================= */
+
+.admin-mobile-header {
+display: none;
+}
+
+/* =========================
+TABLETTE
+========================= */
+
+@media (max-width: 1000px) {
+
+.stats-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+}
+
+/* =========================
+MOBILE
+========================= */
+
 @media (max-width: 768px) {
-  .admin-shell {
-    flex-direction: column;
-  }
 
-  .admin-mobile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1c1c1c;
-    color: #ffffff;
-    padding: 12px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 101;
-  }
+.admin-shell {
+display: block;
+min-height: 100vh;
+}
 
-  .admin-menu-toggle {
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
+/* Header mobile */
 
-  .desktop-only {
-    display: none;
-  }
+.admin-mobile-header {
+position: sticky;
+top: 0;
+z-index: 101;
 
-  /* Cache la sidebar hors de l'écran sur mobile */
-  .admin-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 260px;
-    transform: translateX(-100%);
-  }
+display: flex;
+align-items: center;
+justify-content: space-between;
 
-  /* Affiche la sidebar quand la classe .open est présente */
-  .admin-sidebar.open {
-    transform: translateX(0);
-  }
+padding: 12px 16px;
 
-  /* Voile sombre derrière le menu mobile */
-  .admin-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 99;
-  }
+background: var(--sidebar-bg);
+color: #ffffff;
 
-  .admin-content {
-    padding: 16px;
-  }
+
+}
+
+.admin-mobile-header .admin-logo {
+margin: 0;
+padding: 0;
+}
+
+.admin-menu-toggle {
+display: flex;
+align-items: center;
+justify-content: center;
+
+width: 42px;
+height: 42px;
+
+border: 0;
+border-radius: 7px;
+
+background: transparent;
+color: var(--primary);
+
+
+}
+
+/* Sidebar mobile */
+
+.admin-sidebar {
+position: fixed;
+top: 0;
+left: 0;
+z-index: 1000;
+
+width: 260px;
+height: 100vh;
+
+transform: translateX(-100%);
+transition: transform 0.3s ease;
+
+
+}
+
+.admin-sidebar.open {
+transform: translateX(0);
+}
+
+/* IMPORTANT :
+les 4 menus restent VERTICAUX
+même sur mobile */
+
+.admin-sidebar nav {
+display: flex;
+flex-direction: column;
+gap: 8px;
+overflow: visible;
+}
+
+.admin-nav-item,
+.admin-nav-link,
+.admin-sidebar nav a {
+flex: none;
+width: 100%;
+}
+
+/* Overlay */
+
+.admin-overlay {
+position: fixed;
+inset: 0;
+z-index: 999;
+
+background: rgba(0, 0, 0, 0.5);
+
+
+}
+
+/* Contenu */
+
+.admin-content {
+width: 100%;
+padding: 16px;
+}
+
+.admin-dashboard-heading {
+align-items: flex-start;
+flex-direction: column;
+}
+
+.admin-dashboard-heading h1 {
+font-size: 22px;
+}
+
+/* Statistiques */
+
+.stats-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 10px;
+}
+
+.stat-card {
+padding: 14px;
+}
+
+.stat-value {
+font-size: 24px;
+}
+
+/* Graphique */
+
+.admin-chart {
+padding: 14px;
+overflow-x: auto;
+}
+
+.admin-chart-plot {
+min-width: 500px;
+}
+
+}
+
+/* =========================
+PETIT MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+.admin-content {
+padding: 12px;
+}
+
+.stats-grid {
+grid-template-columns: 1fr;
+}
+
+.admin-chart-plot {
+min-width: 450px;
+}
+
+.admin-table {
+min-width: 600px;
+}
+
 }
 
 @media (max-width: 640px) {

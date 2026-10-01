@@ -3,7 +3,8 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { ChartColumn, ClipboardList, FolderOpen, LogOut, UsersRound, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const menu = [
+// Tous les éléments du menu
+const menuItems = [
   { to: '/admin', label: 'Dashboard', icon: ChartColumn },
   { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UsersRound },
   { to: '/admin/annonces', label: 'Annonces', icon: ClipboardList },
@@ -22,11 +23,23 @@ const AdminLayout = () => {
 
   const closeMenu = () => setMobileMenuOpen(false);
 
+  // Si vous souhaitez restreindre 'Utilisateurs' uniquement à l'Admin/SuperAdmin,
+  // vérifiez la casse du rôle (ex: user?.role === 'admin' ou user?.role === 'super_admin')
+  const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'admin' || user?.role === 'ADMIN';
+
+  const itemsToDisplay = menuItems.filter(item => {
+    // Si c'est la page utilisateurs et que l'utilisateur n'est pas admin, on cache (sinon on affiche tout)
+    if (item.to === '/admin/utilisateurs' && !isSuperAdmin) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <div className="admin-shell">
-      {/* Header mobile avec bouton hamburger */}
+      {/* Header Mobile */}
       <header className="admin-mobile-header">
-        <span className="admin-logo">Admin Dashboard</span>
+        <span className="admin-logo-text">Admin Dashboard</span>
         <button 
           className="admin-menu-toggle" 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -36,29 +49,42 @@ const AdminLayout = () => {
         </button>
       </header>
 
-      {/* Overlay sombre en arrière-plan sur mobile quand le menu est ouvert */}
+      {/* Overlay mobile */}
       {mobileMenuOpen && <div className="admin-overlay" onClick={closeMenu}></div>}
 
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
-        <div className="admin-logo desktop-only">Admin Dashboard</div>
-        <nav>
-          {menu.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/admin'}
-              onClick={closeMenu}
-              className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
-            >
-              <item.icon size={18} aria-hidden="true" /> {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <div>
+          <div className="admin-sidebar-header desktop-only">
+            <h2 className="admin-logo-text">Admin Dashboard</h2>
+          </div>
+
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {itemsToDisplay.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/admin'}
+                  onClick={closeMenu}
+                  className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
+                >
+                  <Icon size={18} aria-hidden="true" />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
+
         <div className="admin-sidebar-footer">
-          <span>{user?.prenom} {user?.nom}</span>
+          <div className="admin-user-info">
+            {user?.prenom || 'Super'} {user?.nom || 'Admin'}
+          </div>
           <button onClick={deconnecter} className="btn-logout">
-            <LogOut size={16} aria-hidden="true" /> Déconnexion
+            <LogOut size={16} aria-hidden="true" />
+            <span>Déconnexion</span>
           </button>
         </div>
       </aside>
