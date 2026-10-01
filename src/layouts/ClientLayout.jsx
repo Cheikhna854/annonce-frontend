@@ -1,6 +1,7 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { FolderOpen, Heart, House, LogOut, MessageCircle, UserRound } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import CurrentUserPresence from '../components/CurrentUserPresence';
 
 const navItems = [
   { to: '/accueil', label: 'Accueil', icon: House },
@@ -23,6 +24,7 @@ const ClientLayout = () => {
     <div className="app-shell">
       <div className="top-bar">
         <span className="top-bar-logo">Annonces.sn</span>
+        <CurrentUserPresence />
         <button onClick={handleLogout} className="top-bar-logout" title="Déconnexion" aria-label="Déconnexion">
           <LogOut size={18} aria-hidden="true" />
         </button>

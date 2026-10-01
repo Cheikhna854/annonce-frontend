@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/axios';
-import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 
 const MyAnnonces = () => {
   const [annonces, setAnnonces] = useState([]);
@@ -78,7 +78,7 @@ const MyAnnonces = () => {
       <div className="mes-annonces-list">
         {annoncesFiltrees.map((a) => (
           <div key={a._id} className="mes-annonce-item">
-            <img src={imageUrl(a.images?.[0])} alt={a.titre} />
+            <AnnonceImage src={a.images?.[0]} alt={a.titre} />
             <div className="mes-annonce-info">
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>

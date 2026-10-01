@@ -3,7 +3,7 @@ import { ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroImage from '../../images/Accueil.jpeg';
 import api from '../../api/axios';
-import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 
 const Splash = () => {
   const [categories, setCategories] = useState([]);
@@ -69,9 +69,9 @@ const Splash = () => {
           <Link to="/recherche" className="landing-view-all">Toutes les annonces <ArrowRight size={16} aria-hidden="true" /></Link>
         </div>
         <div className="annonces-grid landing-annonces-grid">
-          {annonces.map((annonce) => (
+          {annonces.slice(0, 12).map((annonce, index) => (
             <Link to={`/annonce/${annonce._id}`} key={annonce._id} className="annonce-card">
-              <img src={imageUrl(annonce.images?.[0])} alt={annonce.titre} />
+              <AnnonceImage src={annonce.images?.[0]} alt={annonce.titre} loading={index < 2 ? 'eager' : 'lazy'} />
               <div className="annonce-info">
                 <p className="annonce-titre">{annonce.titre}</p>
                 <p className="annonce-prix">{Number(annonce.prix || 0).toLocaleString('fr-FR')} FCFA</p>

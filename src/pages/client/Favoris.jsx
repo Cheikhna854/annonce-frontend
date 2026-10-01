@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/axios';
-import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 
 const Favoris = () => {
   const [favoris, setFavoris] = useState([]);
@@ -16,7 +16,7 @@ const Favoris = () => {
       <div className="annonces-list" style={{ marginTop: 16 }}>
         {favoris.map((a) => (
           <Link to={`/annonce/${a._id}`} key={a._id} className="annonce-row">
-            <img src={imageUrl(a.images?.[0])} alt={a.titre} />
+            <AnnonceImage src={a.images?.[0]} alt={a.titre} />
             <div>
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{a.prix.toLocaleString()} FCFA</p>

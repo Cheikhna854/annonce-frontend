@@ -41,7 +41,7 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="email"
-          placeholder="Email ou téléphone"
+          placeholder="Adresse e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Phone, Search as SearchIcon } from 'lucide-react';
 import api from '../../api/axios';
-import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -122,7 +122,7 @@ const Search = () => {
       <div className="annonces-list">
         {annonces.map((a) => (
           <Link to={`/annonce/${a._id}`} key={a._id} className="annonce-row">
-            <img src={imageUrl(a.images?.[0])} alt={a.titre} />
+            <AnnonceImage src={a.images?.[0]} alt={a.titre} />
             <div>
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>

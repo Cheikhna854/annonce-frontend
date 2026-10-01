@@ -1,5 +1,5 @@
 import { categoryIcon } from '../../api/categoryIcon';
-import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Bell, MapPin, Phone, RotateCw, Search } from 'lucide-react';
@@ -87,9 +87,9 @@ const Home = () => {
         <Link to="/recherche">Voir tout <ArrowRight size={14} aria-hidden="true" /></Link>
       </div>
       <div className="annonces-grid">
-        {annonces.map((a) => (
+        {annonces.slice(0, 20).map((a, index) => (
           <Link to={`/annonce/${a._id}`} key={a._id} className="annonce-card">
-            <img src={imageUrl(a.images?.[0])} alt={a.titre} />
+            <AnnonceImage src={a.images?.[0]} alt={a.titre} loading={index < 2 ? 'eager' : 'lazy'} />
             <div className="annonce-info">
               <p className="annonce-titre">{a.titre}</p>
               <p className="annonce-prix">{Number(a.prix || 0).toLocaleString('fr-FR')} FCFA</p>

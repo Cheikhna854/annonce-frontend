@@ -4,6 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { imageUrl } from '../../api/imageUrl';
+import AnnonceImage from '../../components/AnnonceImage';
 import { whatsappUrl } from '../../api/whatsapp';
 import { useAuth } from '../../context/AuthContext';
 
@@ -79,7 +80,7 @@ const SellerProfile = () => {
         <div className="annonces-grid">
           {annonces.map((annonce) => (
             <Link to={`/annonce/${annonce._id}`} key={annonce._id} className="annonce-card">
-              <img src={imageUrl(annonce.images?.[0])} alt={annonce.titre} />
+              <AnnonceImage src={annonce.images?.[0]} alt={annonce.titre} />
               <div className="annonce-info">
                 <p className="annonce-titre">{annonce.titre}</p>
                 <p className="annonce-prix">{Number(annonce.prix || 0).toLocaleString('fr-FR')} FCFA</p>

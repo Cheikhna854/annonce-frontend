@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
@@ -5,31 +6,31 @@ import PrivateRoute from './components/PrivateRoute';
 import RoleLayout from './layouts/RoleLayout';
 import AdminLayout from './layouts/AdminLayout';
 
-import ChooseRole from './pages/client/ChooseRole';
-import HomeGate from './pages/client/HomeGate';
-import Home from './pages/client/Home';
-import Login from './pages/client/Login';
-import Register from './pages/client/Register';
-import RegisterVendeur from './pages/client/RegisterVendeur';
-import ForgotPassword from './pages/client/ForgotPassword';
-import Categories from './pages/client/Categories';
-import Search from './pages/client/Search';
-import AnnonceDetail from './pages/client/AnnonceDetail';
-import SellerProfile from './pages/client/SellerProfile';
-import PublishAnnonce from './pages/client/PublishAnnonce';
-import MyAnnonces from './pages/client/MyAnnonces';
-import Messages from './pages/client/Messages';
-import Conversation from './pages/client/Conversation';
-import Profile from './pages/client/Profile';
-import EditProfile from './pages/client/EditProfile';
-import Settings from './pages/client/Settings';
-import Notifications from './pages/client/Notifications';
-import Favoris from './pages/client/Favoris';
+const ChooseRole = lazy(() => import('./pages/client/ChooseRole'));
+const HomeGate = lazy(() => import('./pages/client/HomeGate'));
+const Home = lazy(() => import('./pages/client/Home'));
+const Login = lazy(() => import('./pages/client/Login'));
+const Register = lazy(() => import('./pages/client/Register'));
+const RegisterVendeur = lazy(() => import('./pages/client/RegisterVendeur'));
+const ForgotPassword = lazy(() => import('./pages/client/ForgotPassword'));
+const Categories = lazy(() => import('./pages/client/Categories'));
+const Search = lazy(() => import('./pages/client/Search'));
+const AnnonceDetail = lazy(() => import('./pages/client/AnnonceDetail'));
+const SellerProfile = lazy(() => import('./pages/client/SellerProfile'));
+const PublishAnnonce = lazy(() => import('./pages/client/PublishAnnonce'));
+const MyAnnonces = lazy(() => import('./pages/client/MyAnnonces'));
+const Messages = lazy(() => import('./pages/client/Messages'));
+const Conversation = lazy(() => import('./pages/client/Conversation'));
+const Profile = lazy(() => import('./pages/client/Profile'));
+const EditProfile = lazy(() => import('./pages/client/EditProfile'));
+const Settings = lazy(() => import('./pages/client/Settings'));
+const Notifications = lazy(() => import('./pages/client/Notifications'));
+const Favoris = lazy(() => import('./pages/client/Favoris'));
 
-import Dashboard from './pages/admin/Dashboard';
-import Users from './pages/admin/Users';
-import AnnoncesAdmin from './pages/admin/AnnoncesAdmin';
-import CategoriesAdmin from './pages/admin/CategoriesAdmin';
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const Users = lazy(() => import('./pages/admin/Users'));
+const AnnoncesAdmin = lazy(() => import('./pages/admin/AnnoncesAdmin'));
+const CategoriesAdmin = lazy(() => import('./pages/admin/CategoriesAdmin'));
 
 import './index.css';
 
@@ -37,6 +38,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Suspense fallback={<div className="page-loading" role="status">Chargement de la page…</div>}>
         <Routes>
           <Route path="/" element={<HomeGate />} />
           <Route path="/demarrage" element={<Navigate to="/" replace />} />
@@ -71,6 +73,7 @@ function App() {
             <Route path="/admin/categories" element={<CategoriesAdmin />} />
           </Route>
         </Routes>
+        </Suspense>
       </AuthProvider>
     </BrowserRouter>
   );

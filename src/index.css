@@ -47,9 +47,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-bottom: 1px solid #e2e8f0;
   background: var(--sidebar-bg);
 }
-.top-bar-logo { color: var(--primary); font-size: 16px; font-weight: 700; }
+.top-bar-logo { flex: 0 0 auto; color: var(--primary); font-size: 16px; font-weight: 700; white-space: nowrap; }
+.current-user-presence { display: grid; flex: 0 0 68px; grid-template-columns: 68px; grid-template-rows: 24px 12px 12px; justify-items: center; align-content: center; width: 68px; height: 50px; min-width: 0; margin-left: auto; overflow: hidden; color: #ffffff; }
+.current-user-avatar { position: relative; display: grid; grid-row: 1; place-items: center; width: 24px; height: 24px; overflow: visible; border: 1px solid rgba(255,255,255,0.35); border-radius: 50%; background: #394137; color: #ffffff; }
+.current-user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.presence-dot { position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border: 2px solid var(--sidebar-bg); border-radius: 50%; background: #899087; }
+.presence-dot.is-online { background: #27c46b; }
+.current-user-details { display: contents; }
+.current-user-name { display: block; grid-row: 2; overflow: hidden; width: 68px; min-width: 0; font-size: 8px; font-weight: 650; line-height: 12px; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+.current-user-status { display: inline-flex; grid-row: 3; align-items: center; gap: 3px; padding: 0 4px; border-radius: 999px; background: rgba(137,144,135,0.18); color: #c8cec5; font-size: 7px; line-height: 10px; white-space: nowrap; }
+.current-user-status.is-online { background: rgba(39,196,107,0.16); color: #9ce6b8; }
+.presence-dot-small { width: 5px; height: 5px; border-radius: 50%; background: #899087; }
+.current-user-status.is-online .presence-dot-small { background: #27c46b; }
 .top-bar-logout {
   display: grid;
+  flex: 0 0 36px;
   place-items: center;
   width: 36px;
   height: 36px;
@@ -59,6 +71,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--sidebar-bg);
 }
 .app-content { flex: 1; }
+.page-loading { display: grid; min-height: 40vh; place-items: center; padding: 24px; color: var(--text-muted); }
 .page { padding: 16px 16px 30px; }
 .page > h1 { margin-bottom: 6px; font-size: 24px; }
 .page-subtitle { margin-bottom: 22px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
@@ -366,10 +379,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .conversation-input button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--primary); color: var(--sidebar-bg); }
 .conversation-input button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.profile-header { padding: 20px 0; text-align: center; }
-.profile-avatar-link { display: grid; place-items: center; width: 84px; height: 84px; margin: 0 auto 10px; border: 1px solid #e8e9e5; border-radius: 50%; background: #ffffff; color: var(--text-muted); }
-.profile-avatar-link img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.profile-header p { color: var(--text-muted); font-size: 13px; }
+.profile-header { display: flex; flex-direction: column; align-items: center; padding: 20px 0; text-align: center; }
+.profile-avatar-link { position: relative; display: grid; flex: 0 0 64px; place-items: center; width: 64px; height: 64px; overflow: hidden; margin: 0 auto 12px; border: 1px solid #e8e9e5; border-radius: 50%; background: #ffffff; color: var(--text-muted); }
+.profile-avatar-link img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.profile-header h2 { max-width: 100%; margin-bottom: 5px; overflow-wrap: anywhere; font-size: 20px; line-height: 1.2; }
+.profile-header p { max-width: 100%; color: var(--text-muted); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 .profile-menu { overflow: hidden; margin-top: 16px; border-radius: 8px; border: 1px solid #e8e9e5; background: #ffffff; }
 .profile-menu-item {
   display: flex;
