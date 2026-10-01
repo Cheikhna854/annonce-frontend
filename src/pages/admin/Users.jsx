@@ -16,36 +16,38 @@ const Users = () => {
   return (
     <div className="page">
       <h2>Utilisateurs</h2>
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Rôle</th>
-            <th>Statut</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((u) => (
-            <tr key={u._id}>
-              <td>{u.prenom} {u.nom}</td>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
-              <td>
-                <span className={`badge ${u.isBlocked ? 'badge-off' : 'badge-online'}`}>
-                  {u.isBlocked ? 'Bloqué' : 'Actif'}
-                </span>
-              </td>
-              <td>
-                <button onClick={() => toggleBloquer(u._id)}>
-                  {u.isBlocked ? 'Débloquer' : 'Bloquer'}
-                </button>
-              </td>
+      <div className="table-responsive">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u._id}>
+                <td>{u.prenom} {u.nom}</td>
+                <td>{u.email}</td>
+                <td>{u.role}</td>
+                <td>
+                  <span className={`badge ${u.isBlocked ? 'badge-off' : 'badge-online'}`}>
+                    {u.isBlocked ? 'Bloqué' : 'Actif'}
+                  </span>
+                </td>
+                <td>
+                  <button onClick={() => toggleBloquer(u._id)}>
+                    {u.isBlocked ? 'Débloquer' : 'Bloquer'}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
