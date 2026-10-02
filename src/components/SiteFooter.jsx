@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
+import whatsappQr from '../images/whatsapp-qr.png';
 
 const categoriesFallback = ['Immobilier', 'Automobile', 'Emploi', 'Téléphones', 'Informatique', 'Mode', 'Services', 'Électronique'];
 
@@ -50,6 +51,10 @@ const SiteFooter = () => {
             <path d="M12.1 10.2c-.4-.8-.8-.8-1.2-.8h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.6-1.6 3.9s1.7 4.5 1.9 4.8c.2.3 3.2 5.1 7.8 6.9 3.9 1.5 4.7 1.2 5.5 1.1.8-.1 2.5-1 2.9-2.1.4-1 .4-1.9.3-2.1-.1-.2-.4-.3-.9-.6-.5-.2-2.5-1.2-2.9-1.3-.4-.2-.7-.2-1 .3-.3.5-1.1 1.3-1.4 1.6-.3.3-.5.4-1 .1-.5-.2-1.9-.7-3.6-2.2-1.3-1.2-2.2-2.6-2.5-3.1-.3-.5 0-.7.2-.9.2-.2.5-.6.7-.8.2-.3.3-.5.5-.8.2-.3.1-.6 0-.8-.1-.2-.9-2.2-1.3-3Z" fill="currentColor" transform="translate(4 1) scale(.78)" />
           </svg>
           Écrire sur WhatsApp
+        </a>
+        <a className="site-footer-qr" href="https://wa.me/221778579693?text=Bonjour%20SenAnnonces" target="_blank" rel="noreferrer" aria-label="Scanner le QR code pour ouvrir WhatsApp">
+          <img src={whatsappQr} alt="QR code pour contacter SenAnnonces sur WhatsApp" loading="lazy" />
+          <span>Scannez pour nous écrire</span>
         </a>
       </section>
     </div>
