@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { ChartColumn, ClipboardList, FolderOpen, LogOut, UsersRound, Menu, X } from 'lucide-react';
+import { ChartColumn, ClipboardList, FolderOpen, Flag, LogOut, UsersRound, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Tous les éléments du menu
@@ -8,6 +8,7 @@ const menuItems = [
   { to: '/admin', label: 'Dashboard', icon: ChartColumn },
   { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UsersRound },
   { to: '/admin/annonces', label: 'Annonces', icon: ClipboardList },
+  { to: '/admin/signalements', label: 'Signalements', icon: Flag },
   { to: '/admin/categories', label: 'Catégories', icon: FolderOpen },
 ];
 

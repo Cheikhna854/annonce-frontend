@@ -35,6 +35,7 @@ const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const Users = lazy(() => import('./pages/admin/Users'));
 const AnnoncesAdmin = lazy(() => import('./pages/admin/AnnoncesAdmin'));
 const CategoriesAdmin = lazy(() => import('./pages/admin/CategoriesAdmin'));
+const SignalementsAdmin = lazy(() => import('./pages/admin/SignalementsAdmin'));
 
 import './index.css';
 
@@ -80,6 +81,7 @@ function App() {
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/utilisateurs" element={<Users />} />
             <Route path="/admin/annonces" element={<AnnoncesAdmin />} />
+            <Route path="/admin/signalements" element={<SignalementsAdmin />} />
             <Route path="/admin/categories" element={<CategoriesAdmin />} />
           </Route>
         </Routes>
