@@ -27,6 +27,9 @@ const EditProfile = lazy(() => import('./pages/client/EditProfile'));
 const Settings = lazy(() => import('./pages/client/Settings'));
 const Notifications = lazy(() => import('./pages/client/Notifications'));
 const Favoris = lazy(() => import('./pages/client/Favoris'));
+const InformationPage = lazy(() => import('./pages/client/InformationPage'));
+const PublicSearchPage = lazy(() => import('./pages/client/PublicSearchPage'));
+const ContactPage = lazy(() => import('./pages/client/ContactPage'));
 
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const Users = lazy(() => import('./pages/admin/Users'));
@@ -48,6 +51,11 @@ function App() {
           <Route path="/inscription" element={<Register />} />
           <Route path="/inscription-prestataire" element={<RegisterVendeur />} />
           <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
+          <Route path="/a-propos" element={<InformationPage />} />
+          <Route path="/conditions-utilisation" element={<InformationPage />} />
+          <Route path="/confidentialite" element={<InformationPage />} />
+          <Route path="/explorer" element={<PublicSearchPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/conversation/:contactId" element={<PrivateRoute roles={['client', 'prestataire']}><Conversation /></PrivateRoute>} />
 
           <Route element={<PrivateRoute roles={['client', 'prestataire']}><RoleLayout /></PrivateRoute>}>
