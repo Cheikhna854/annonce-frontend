@@ -444,6 +444,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .stat-red { color: var(--danger); }
 .stat-card-annonces .stat-value { color: var(--success); }
 .stat-card-attente .stat-value { color: var(--warning); }
+.stat-card-jaime .stat-value { color: #d94d67; }
 .stat-card-signalements .stat-value { color: var(--danger); }
 
 /* Graphique Admin */
@@ -458,7 +459,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .admin-chart-bar-users { background: var(--primary); }
 .admin-chart-bar-annonces { background: var(--success); }
 .admin-chart-bar-attente { background: var(--warning); }
+.admin-chart-bar-jaime { background: #d94d67; }
 .admin-chart-bar-signalements { background: var(--danger); }
+.admin-pie-chart { padding: 22px; }
+.admin-pie-heading h2 { margin: 0 0 5px; color: var(--text); font-size: 16px; }
+.admin-pie-heading p { margin: 0; color: var(--text-muted); font-size: 12px; }
+.admin-pie-content { display: flex; align-items: center; justify-content: center; gap: clamp(28px, 7vw, 84px); padding: 24px 12px 10px; }
+.admin-pie { display: grid; flex: 0 0 210px; place-items: center; width: 210px; aspect-ratio: 1; border-radius: 50%; }
+.admin-pie::before { content: ''; grid-area: 1 / 1; width: 68%; aspect-ratio: 1; border-radius: 50%; background: #fff; }
+.admin-pie span { z-index: 1; grid-area: 1 / 1; color: #34483d; font-size: 13px; font-weight: 700; }
+.admin-pie-legend { display: grid; gap: 13px; min-width: min(260px, 100%); margin: 0; padding: 0; list-style: none; }
+.admin-pie-legend li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 10px; color: var(--text-muted); font-size: 13px; }
+.admin-pie-key { width: 11px; height: 11px; border-radius: 3px; }
+.admin-pie-legend strong { color: var(--text); font-size: 13px; }
+@media (max-width: 520px) {
+  .admin-pie-content { flex-direction: column; gap: 24px; }
+  .admin-pie { flex-basis: 180px; width: 180px; }
+  .admin-pie-legend { width: 100%; }
+}
 
 /* Tables Admin */
 .admin-table { width: 100%; overflow: hidden; margin-top: 16px; border-collapse: collapse; border: 1px solid #e8e9e5; border-radius: 8px; background: white; }
@@ -1530,7 +1548,26 @@ min-width: 600px;
 .edit-annonce-actions button:disabled { cursor: wait; opacity: .65; }
 .mes-annonce-actions a { display: inline-flex; align-items: center; min-height: 30px; }
 .mes-annonce-actions a:hover { text-decoration: underline; }
+.site-footer { padding: 44px clamp(22px, 5vw, 58px) 16px; background: #12458f; color: #d9e5fa; }
+.site-footer-grid { display: grid; grid-template-columns: 1.25fr .8fr .8fr .85fr; gap: clamp(24px, 5vw, 72px); max-width: 1360px; margin: 0 auto; }
+.site-footer-about, .site-footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.site-footer-brand, .site-footer-column h2 { margin: 0 0 4px; color: #fff; font-size: 15px; font-weight: 750; }
+.site-footer-about p { max-width: 360px; margin: 0; color: #c3d5f2; font-size: 13px; line-height: 1.65; }
+.site-footer-column a, .site-footer-column span { color: #c3d5f2; font-size: 13px; line-height: 1.45; text-decoration: none; transition: color .18s ease; }
+.site-footer-column a:hover { color: white; text-decoration: underline; }
+.site-footer-bottom { max-width: 1360px; margin: 28px auto 0; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.18); color: #c3d5f2; font-size: 11px; }
 @media (max-width: 520px) {
   .edit-annonce-actions { flex-direction: column-reverse; }
   .edit-annonce-actions button { width: 100%; }
+}
+@media (max-width: 760px) {
+  .site-footer { padding: 34px 22px 26px; }
+  .app-shell .site-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .site-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 22px; }
+  .site-footer-about { grid-column: 1 / -1; }
+}
+@media (max-width: 420px) {
+  .site-footer-grid { grid-template-columns: 1fr 1fr; gap: 25px 16px; }
+  .site-footer-column h2, .site-footer-brand { font-size: 14px; }
+  .site-footer-column a, .site-footer-column span, .site-footer-about p { font-size: 12px; }
 }

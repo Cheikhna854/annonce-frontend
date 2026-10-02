@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import heroImage from '../../images/Accueil.jpeg';
 import api from '../../api/axios';
 import AnnonceImage from '../../components/AnnonceImage';
+import SiteFooter from '../../components/SiteFooter';
 import formatAnnonceDate from '../../utils/formatAnnonceDate';
 
 const Splash = () => {
@@ -85,6 +86,7 @@ const Splash = () => {
           {!chargement && annonces.length === 0 && <p className="empty-state">Aucune annonce disponible pour le moment.</p>}
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 };

@@ -19,11 +19,24 @@ const Dashboard = () => {
   const indicateurs = [
     { label: 'Utilisateurs', valeur: stats.totalUsers, tone: 'users' },
     { label: 'Annonces', valeur: stats.totalAnnonces, tone: 'annonces' },
-    { label: 'En attente', valeur: stats.enAttente, tone: 'attente' },
+    { label: 'Favoris', valeur: stats.totalJaime, tone: 'jaime' },
     { label: 'Signalements', valeur: stats.signalements, tone: 'signalements' },
   ];
   const maximum = Math.max(1, ...indicateurs.map((item) => Number(item.valeur) || 0));
   const graduations = [maximum, Math.round(maximum * 0.75), Math.round(maximum * 0.5), Math.round(maximum * 0.25), 0];
+  const couleurs = { users: '#e3b34c', annonces: '#168454', jaime: '#d94d67', signalements: '#dc2626' };
+  const totalIndicateurs = indicateurs.reduce((total, item) => total + (Number(item.valeur) || 0), 0);
+  let progression = 0;
+  const partsCirculaires = indicateurs.map((item) => {
+    const valeur = Number(item.valeur) || 0;
+    const debut = totalIndicateurs ? progression / totalIndicateurs * 100 : 0;
+    progression += valeur;
+    const fin = totalIndicateurs ? progression / totalIndicateurs * 100 : 100;
+    return `${couleurs[item.tone]} ${debut}% ${fin}%`;
+  });
+  const fondCirculaire = totalIndicateurs
+    ? `conic-gradient(${partsCirculaires.join(', ')})`
+    : 'conic-gradient(#e5e7eb 0% 100%)';
 
   return (
     <div className="page admin-dashboard">
@@ -68,6 +81,32 @@ const Dashboard = () => {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      <section className="admin-chart admin-pie-chart" aria-labelledby="admin-pie-title">
+        <div className="admin-pie-heading">
+          <h2 id="admin-pie-title">Répartition des indicateurs</h2>
+          <p>Vue circulaire des données du tableau de bord</p>
+        </div>
+        <div className="admin-pie-content">
+          <div
+            className="admin-pie"
+            style={{ background: fondCirculaire }}
+            role="img"
+            aria-label={indicateurs.map((item) => `${item.label} : ${item.valeur}`).join(', ')}
+          >
+            <span>Répartition</span>
+          </div>
+          <ul className="admin-pie-legend">
+            {indicateurs.map((item) => (
+              <li key={item.tone}>
+                <span className="admin-pie-key" style={{ backgroundColor: couleurs[item.tone] }} aria-hidden="true" />
+                <span>{item.label}</span>
+                <strong>{item.valeur}</strong>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </div>

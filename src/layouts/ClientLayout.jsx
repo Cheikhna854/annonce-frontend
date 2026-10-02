@@ -2,6 +2,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { FolderOpen, Heart, House, LogOut, MessageCircle, UserRound } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import CurrentUserPresence from '../components/CurrentUserPresence';
+import SiteFooter from '../components/SiteFooter';
 
 const navItems = [
   { to: '/accueil', label: 'Accueil', icon: House },
@@ -45,6 +46,7 @@ const ClientLayout = () => {
       <main className="app-content">
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   );
 };
